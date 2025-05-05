@@ -1,0 +1,42 @@
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+spring:
+  application:
+    name: AgentX
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:agentx}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:}
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+mybatis-plus:
+  mapper-locations: classpath*:/mapper/**/*.xml
+  type-aliases-package: org.zhj.agentz.domain
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+  global-config:
+    db-config:
+      id-type: auto
+      logic-delete-value: 1
+      logic-not-delete-value: 0
+llm:
+  provider:
+    default: ${LLM_DEFAULT_PROVIDER:siliconflow}
+    providers:
+      siliconflow:
+        name: SiliconFlow
+        api-url: ${SILICONFLOW_API_URL:https://api.siliconflow.cn/v1/chat/completions}
+        api-key: ${SILICONFLOW_API_KEY:sk-pcbtkodxfurshlnsvmlzisfolvufynfttazbgdvrzridookn}
+        model: ${SILICONFLOW_MODEL:Qwen/Qwen2.5-VL-72B-Instruct}
+        timeout: ${SILICONFLOW_TIMEOUT:30000}
+logging:
+  level:
+    root: info
+    org.xhy: debug
+  file:
+    name: logs/agent-z.log
