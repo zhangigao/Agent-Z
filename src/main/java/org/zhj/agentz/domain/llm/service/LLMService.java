@@ -3,6 +3,8 @@ package org.zhj.agentz.domain.llm.service;
 import org.zhj.agentz.domain.llm.model.LLMRequest;
 import org.zhj.agentz.domain.llm.model.LLMResponse;
 
+import java.util.List;
+
 /**
  * LLM服务接口
  */
@@ -23,7 +25,15 @@ public interface LLMService {
      * @return 生成的响应内容
      */
     String simpleChat(String text);
-    
+
+    /**
+     * 发送流式请求到LLM服务商，返回文本块列表
+     *
+     * @param request LLM请求
+     * @return 文本块列表
+     */
+    List<String> chatStreamList(LLMRequest request);
+
     /**
      * 获取服务商名称
      *
