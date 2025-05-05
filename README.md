@@ -18,10 +18,15 @@
 
 ## 🛠️ 技术架构
 ### 分层架构（DDD）
+
 src
-├── interfaces    # 接口层：REST API、WebSocket、定时任务
+
+├── interfaces    # 接口层：REST API
+
 ├── application   # 应用层：工作流编排、事务管理
+
 ├── domain        # 领域层：对话管理、知识库、计费系统
+
 └── infrastructure # 基础设施：向量数据库、模型服务、缓存
 ### 技术栈
 - **后端**: Java 17 / Spring Boot 3.1 / Spring Data JPA
