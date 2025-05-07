@@ -7,7 +7,7 @@ spring:
     name: AgentX
   datasource:
     driver-class-name: org.postgresql.Driver
-    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:agentx}
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:agentz}
     username: ${DB_USERNAME:postgres}
     password: ${DB_PASSWORD:}
   jackson:
@@ -37,6 +37,6 @@ llm:
 logging:
   level:
     root: info
-    org.xhy: debug
+    org.zhj: debug
   file:
     name: logs/agent-z.log

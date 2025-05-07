@@ -3,6 +3,7 @@ package org.zhj.agentz.infrastructure.entity;
 import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableLogic;
+import org.apache.ibatis.jdbc.Null;
 
 import java.time.LocalDateTime;
 
@@ -14,7 +15,10 @@ public class BaseEntity {
     @TableField(fill = FieldFill.INSERT_UPDATE)
     protected LocalDateTime updatedAt;
 
-    @TableLogic
+    @TableLogic(
+            value = "NULL",             // 未删除时数据库中的值（NULL）
+            delval = "NOW()"            // 删除时自动填充当前时间戳
+    )
     protected LocalDateTime deletedAt;
 
     @TableField(exist = false)

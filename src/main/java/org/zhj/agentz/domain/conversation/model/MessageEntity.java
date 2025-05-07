@@ -8,6 +8,7 @@ import org.zhj.agentz.infrastructure.converter.RoleConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /** 消息实体类，代表对话中的一条消息 */
 @TableName("messages")
@@ -22,8 +23,8 @@ public class MessageEntity extends BaseEntity {
     private String sessionId;
 
     /** 消息角色 (user, assistant, system) */
-    @TableField(value = "role", typeHandler = RoleConverter.class)
-    private Role role;
+    //@TableField(value = "role", typeHandler = RoleConverter.class)
+    private String role;
 
     /** 消息内容 */
     @TableField("content")
@@ -74,11 +75,11 @@ public class MessageEntity extends BaseEntity {
         this.sessionId = sessionId;
     }
 
-    public Role getRole() {
+    public String getRole() {
         return role;
     }
 
-    public void setRole(Role role) {
+    public void setRole(String role) {
         this.role = role;
     }
 
@@ -139,14 +140,42 @@ public class MessageEntity extends BaseEntity {
     }
 
     public boolean isUserMessage() {
-        return this.role == Role.USER;
+        return Objects.equals(this.role, Role.USER.name());
     }
 
     public boolean isAIMessage() {
-        return this.role == Role.ASSISTANT;
+        return Objects.equals(this.role, Role.ASSISTANT.name());
     }
 
     public boolean isSystemMessage() {
-        return this.role == Role.SYSTEM;
+        return Objects.equals(this.role, Role.SYSTEM.name());
+    }
+
+    /**
+     * 创建用户消息
+     */
+    public static MessageEntity createUserMessage(String sessionId, String content) {
+        MessageEntity message = new MessageEntity();
+        message.setSessionId(sessionId);
+        message.setRole("user");
+        message.setContent(content);
+        message.setCreatedAt(LocalDateTime.now());
+        return message;
+    }
+
+    /**
+     * 创建助手消息
+     */
+    public static MessageEntity createAssistantMessage(String sessionId, String content,
+                                                       String provider, String model, Integer tokenCount) {
+        MessageEntity message = new MessageEntity();
+        message.setSessionId(sessionId);
+        message.setRole("assistant");
+        message.setContent(content);
+        message.setCreatedAt(LocalDateTime.now());
+        message.setProvider(provider);
+        message.setModel(model);
+        message.setTokenCount(tokenCount);
+        return message;
     }
 }

@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.zhj.agentz.domain.agent.constant.AgentType;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
+
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -55,7 +56,7 @@ public class AgentEntity extends BaseEntity {
     private Boolean enabled;
 
     /** Agent类型：1-聊天助手, 2-功能性Agent */
-    @TableField("agent_type")
+    @TableField(value = "agent_type")
     private Integer agentType;
 
     /** 创建者用户ID */

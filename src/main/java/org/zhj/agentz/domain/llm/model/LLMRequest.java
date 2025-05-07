@@ -54,10 +54,9 @@ public class LLMRequest {
      * 添加用户消息
      *
      * @param content 消息内容
-     * @return this
      */
-    public LLMRequest addUserMessage(String content) {
-        return addMessage(LLMMessage.ofUser(content));
+    public void addUserMessage(String content) {
+        addMessage(LLMMessage.ofUser(content));
     }
 
     /**
