@@ -2,6 +2,7 @@ package org.zhj.agentz;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
 /**
  * 启动类
@@ -9,8 +10,13 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class AgentZApplication {
 
+    public static ConfigurableApplicationContext context;
+
     public static void main(String[] args) {
-        SpringApplication.run(AgentZApplication.class, args);
+        ConfigurableApplicationContext context = SpringApplication.run(AgentZApplication.class, args);
     }
 
+    public static ConfigurableApplicationContext getContext() {
+        return context;
+    }
 }

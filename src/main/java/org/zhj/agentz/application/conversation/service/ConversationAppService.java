@@ -1,15 +1,22 @@
 package org.zhj.agentz.application.conversation.service;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.tinylog.pattern.Token;
 import org.zhj.agentz.application.conversation.dto.StreamChatRequest;
 import org.zhj.agentz.application.conversation.dto.StreamChatResponse;
 import org.zhj.agentz.domain.conversation.dto.MessageDTO;
 import org.zhj.agentz.domain.conversation.model.SessionEntity;
 import org.zhj.agentz.domain.conversation.service.ConversationDomainService;
 import org.zhj.agentz.domain.conversation.service.SessionDomainService;
+import org.zhj.agentz.domain.service.AgentDomainService;
+import org.zhj.agentz.domain.token.service.TokenDomainService;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
 
 import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.BiConsumer;
 
 
@@ -20,17 +27,20 @@ import java.util.function.BiConsumer;
 public class ConversationAppService {
 
     private final ConversationDomainService conversationDomainService;
-
     private final SessionDomainService sessionDomainService;
+    private final TokenDomainService tokenDomainService;
+    private final AgentDomainService agentDomainService;
 
 
     public ConversationAppService(
             ConversationDomainService conversationDomainService,
-            SessionDomainService sessionDomainService
-            ) {
+            SessionDomainService sessionDomainService,
+            TokenDomainService tokenDomainService,
+            AgentDomainService agentDomainService) {
         this.conversationDomainService = conversationDomainService;
         this.sessionDomainService = sessionDomainService;
-
+        this.tokenDomainService = tokenDomainService;
+        this.agentDomainService = agentDomainService;
     }
 
     /**
