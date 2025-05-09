@@ -2,6 +2,7 @@ package org.zhj.agentz.interfaces.dto;
 
 
 import org.zhj.agentz.domain.agent.constant.AgentType;
+import org.zhj.agentz.domain.agent.model.AgentModelConfig;
 import org.zhj.agentz.domain.agent.model.AgentTool;
 import org.zhj.agentz.domain.agent.model.ModelConfig;
 import org.zhj.agentz.infrastructure.utils.ValidationUtils;
@@ -19,7 +20,7 @@ public class CreateAgentRequest {
     private AgentType agentType = AgentType.CHAT_ASSISTANT;
     private String systemPrompt;
     private String welcomeMessage;
-    private ModelConfig modelConfig;
+    private AgentModelConfig modelConfig;
     private List<AgentTool> tools;
     private List<String> knowledgeBaseIds;
 
@@ -28,7 +29,7 @@ public class CreateAgentRequest {
     }
 
     public CreateAgentRequest(String name, String description, String avatar, AgentType agentType,
-                              String systemPrompt, String welcomeMessage, ModelConfig modelConfig,
+                              String systemPrompt, String welcomeMessage, AgentModelConfig modelConfig,
                               List<AgentTool> tools, List<String> knowledgeBaseIds, String userId) {
         this.name = name;
         this.description = description;
@@ -43,7 +44,7 @@ public class CreateAgentRequest {
 
     // 兼容旧构造方法
     public CreateAgentRequest(String name, String description, String avatar, Integer agentTypeCode,
-                              String systemPrompt, String welcomeMessage, ModelConfig modelConfig,
+                              String systemPrompt, String welcomeMessage, AgentModelConfig modelConfig,
                               List<AgentTool> tools, List<String> knowledgeBaseIds, String userId) {
         this(name, description, avatar,
                 agentTypeCode != null ? AgentType.fromCode(agentTypeCode) : AgentType.CHAT_ASSISTANT,
@@ -121,11 +122,11 @@ public class CreateAgentRequest {
         this.welcomeMessage = welcomeMessage;
     }
 
-    public ModelConfig getModelConfig() {
+    public AgentModelConfig getModelConfig() {
         return modelConfig;
     }
 
-    public void setModelConfig(ModelConfig modelConfig) {
+    public void setModelConfig(AgentModelConfig modelConfig) {
         this.modelConfig = modelConfig;
     }
 

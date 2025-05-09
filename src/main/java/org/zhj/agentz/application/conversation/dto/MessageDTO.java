@@ -1,4 +1,4 @@
-package org.zhj.agentz.domain.conversation.dto;
+package org.zhj.agentz.application.conversation.dto;
 
 import org.zhj.agentz.domain.conversation.constant.Role;
 import org.zhj.agentz.domain.conversation.model.MessageEntity;
@@ -9,11 +9,29 @@ import java.time.LocalDateTime;
  * 消息DTO，用于API响应
  */
 public class MessageDTO {
+    /**
+     * 消息ID
+     */
     private String id;
+    /**
+     * 消息角色
+     */
     private Role role;
+    /**
+     * 消息内容
+     */
     private String content;
+    /**
+     * 创建时间
+     */
     private LocalDateTime createdAt;
+    /**
+     * 提供商
+     */
     private String provider;
+    /**
+     * 模型
+     */
     private String model;
 
     /**
@@ -22,18 +40,6 @@ public class MessageDTO {
     public MessageDTO() {
     }
 
-    /**
-     * 全参构造函数
-     */
-    public MessageDTO(String id, Role role, String content, LocalDateTime createdAt,
-            String provider, String model) {
-        this.id = id;
-        this.role = role;
-        this.content = content;
-        this.createdAt = createdAt;
-        this.provider = provider;
-        this.model = model;
-    }
 
     // Getter和Setter方法
     public String getId() {

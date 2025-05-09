@@ -1,5 +1,6 @@
 package org.zhj.agentz.interfaces.api.portal.agent;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhj.agentz.application.agent.service.AgentAppService;
 import org.zhj.agentz.domain.agent.dto.AgentDTO;
@@ -68,9 +69,10 @@ public class PortalAgentController {
      */
     @PutMapping("/{agentId}")
     public Result<AgentDTO> updateAgent(@PathVariable String agentId,
-            @RequestBody UpdateAgentRequest request) {
+                                        @RequestBody @Validated UpdateAgentRequest request) {
         String userId = UserContext.getCurrentUserId();
-        return Result.success(agentAppService.updateAgent(agentId, request, userId));
+        request.setAgentId(agentId);
+        return Result.success(agentAppService.updateAgent(request, userId));
     }
 
     /**

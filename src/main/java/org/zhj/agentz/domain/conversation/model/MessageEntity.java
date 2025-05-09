@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.*;
 import org.zhj.agentz.domain.conversation.constant.MessageType;
 import org.zhj.agentz.domain.conversation.constant.Role;
 import org.zhj.agentz.infrastructure.converter.MessageTypeConverter;
-import org.zhj.agentz.infrastructure.converter.RoleConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -24,7 +23,7 @@ public class MessageEntity extends BaseEntity {
 
     /** 消息角色 (user, assistant, system) */
     //@TableField(value = "role", typeHandler = RoleConverter.class)
-    private String role;
+    private Role role;
 
     /** 消息内容 */
     @TableField("content")
@@ -75,11 +74,11 @@ public class MessageEntity extends BaseEntity {
         this.sessionId = sessionId;
     }
 
-    public String getRole() {
+    public Role getRole() {
         return role;
     }
 
-    public void setRole(String role) {
+    public void setRole(Role role) {
         this.role = role;
     }
 
@@ -157,7 +156,7 @@ public class MessageEntity extends BaseEntity {
     public static MessageEntity createUserMessage(String sessionId, String content) {
         MessageEntity message = new MessageEntity();
         message.setSessionId(sessionId);
-        message.setRole("user");
+        message.setRole(Role.USER);
         message.setContent(content);
         message.setCreatedAt(LocalDateTime.now());
         return message;
@@ -170,7 +169,7 @@ public class MessageEntity extends BaseEntity {
                                                        String provider, String model, Integer tokenCount) {
         MessageEntity message = new MessageEntity();
         message.setSessionId(sessionId);
-        message.setRole("assistant");
+        message.setRole(Role.ASSISTANT);
         message.setContent(content);
         message.setCreatedAt(LocalDateTime.now());
         message.setProvider(provider);

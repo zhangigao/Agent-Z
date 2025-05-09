@@ -48,4 +48,20 @@ public class MessageAssembler {
                 .map(MessageAssembler::toDTO)
                 .collect(Collectors.toList());
     }
+
+    /**
+     * 将消息实体列表转换为DTO列表
+     *
+     * @param messages 消息实体列表
+     * @return 消息DTO列表
+     */
+    public static List<MessageDTO> toDTOs(List<MessageEntity> messages) {
+        if (messages == null) {
+            return Collections.emptyList();
+        }
+
+        return messages.stream()
+                .map(MessageAssembler::toDTO)
+                .collect(Collectors.toList());
+    }
 }

@@ -1,13 +1,12 @@
 package org.zhj.agentz.domain.conversation.repository;
 
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.zhj.agentz.domain.conversation.model.SessionEntity;
+import org.zhj.agentz.infrastructure.repository.MyBatisPlusExtRepository;
 
 /**
  * 会话仓库接口
  */
 @Mapper
-public interface SessionRepository extends BaseMapper<SessionEntity> {
-    // 使用MyBatis Plus的方式实现查询，不再使用手写SQL
+public interface SessionRepository extends MyBatisPlusExtRepository<SessionEntity> {
 }

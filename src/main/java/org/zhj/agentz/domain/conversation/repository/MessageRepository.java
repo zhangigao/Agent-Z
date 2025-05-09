@@ -1,9 +1,9 @@
 package org.zhj.agentz.domain.conversation.repository;
 
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
-import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
 import org.zhj.agentz.domain.conversation.model.MessageEntity;
+import org.zhj.agentz.infrastructure.repository.MyBatisPlusExtRepository;
 
 import java.util.List;
 
@@ -11,6 +11,6 @@ import java.util.List;
  * 消息仓库接口
  */
 @Mapper
-public interface MessageRepository extends BaseMapper<MessageEntity> {
+public interface MessageRepository extends MyBatisPlusExtRepository<MessageEntity> {
     List<MessageEntity> selectList(LambdaQueryWrapper<MessageEntity> eq);
 }

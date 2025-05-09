@@ -3,6 +3,9 @@ package org.zhj.agentz.application.conversation.assembler;
 
 import org.zhj.agentz.domain.conversation.dto.SessionDTO;
 import org.zhj.agentz.domain.conversation.model.SessionEntity;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class SessionAssembler {
 
@@ -29,5 +32,12 @@ public class SessionAssembler {
         session.setDescription(sessionDTO.getDescription());
         session.setArchived(sessionDTO.isArchived());
         return session;
+    }
+
+    public static List<SessionDTO> toDTOs(List<SessionEntity> sessions) {
+        if (sessions == null || sessions.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return sessions.stream().map(SessionAssembler::toDTO).collect(Collectors.toList());
     }
 }

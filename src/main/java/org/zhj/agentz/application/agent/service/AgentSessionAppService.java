@@ -2,8 +2,12 @@ package org.zhj.agentz.application.agent.service;
 
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.zhj.agentz.domain.agent.dto.AgentDTO;
+import org.zhj.agentz.application.conversation.assembler.SessionAssembler;
+import org.zhj.agentz.domain.agent.model.AgentEntity;
+import org.zhj.agentz.domain.conversation.constant.Role;
 import org.zhj.agentz.domain.conversation.dto.SessionDTO;
+import org.zhj.agentz.domain.conversation.model.MessageEntity;
+import org.zhj.agentz.domain.conversation.model.SessionEntity;
 import org.zhj.agentz.domain.conversation.service.ConversationDomainService;
 import org.zhj.agentz.domain.conversation.service.SessionDomainService;
 import org.zhj.agentz.domain.service.AgentDomainService;
@@ -11,7 +15,6 @@ import org.zhj.agentz.domain.service.AgentWorkspaceDomainService;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
 import org.zhj.agentz.interfaces.dto.ConversationRequest;
 
-import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -45,22 +48,21 @@ public class AgentSessionAppService {
     public List<SessionDTO> getAgentSessionList(String userId, String agentId) {
 
         // 校验该 agent 是否被添加了工作区，判断条件：是否是自己的助理 or 在工作区中
-        boolean b = agentServiceDomainService.checkAgentExist(agentId, userId);
-        boolean b1 = agentWorkspaceDomainService.checkAgentWorkspaceExist(agentId, userId);
+        boolean b = agentServiceDomainService.exist(agentId, userId);
+        boolean b1 = agentWorkspaceDomainService.exist(agentId, userId);
 
         if (!b && !b1){
             throw new BusinessException("助理不存在");
         }
 
         // 获取对应的会话列表
-        List<SessionDTO> sessions = sessionDomainService.getSessionsByAgentId(agentId);
+        List<SessionEntity> sessions = sessionDomainService.getSessionsByAgentId(agentId);
         if (sessions.isEmpty()) {
             // 如果会话列表为空，则新创建一个并且返回
-            SessionDTO session = sessionDomainService.createSession(agentId, userId);
-            return Collections.singletonList(session);
+            SessionEntity session = sessionDomainService.createSession(agentId, userId);
+            sessions.add(session);
         }
-
-        return sessions;
+        return SessionAssembler.toDTOs(sessions);
     }
 
     /**
@@ -71,11 +73,15 @@ public class AgentSessionAppService {
      * @return 会话
      */
     public SessionDTO createSession(String userId, String agentId) {
-        SessionDTO session = sessionDomainService.createSession(agentId, userId);
-        AgentDTO agentDTO = agentServiceDomainService.getAgentWithPermissionCheck(agentId, userId);
-        String welcomeMessage = agentDTO.getWelcomeMessage();
-        conversationDomainService.saveAssistantMessage(session.getId(),welcomeMessage,"","",0);
-        return session;
+        SessionEntity session = sessionDomainService.createSession(agentId, userId);
+        AgentEntity agent = agentServiceDomainService.getAgentWithPermissionCheck(agentId, userId);
+        String welcomeMessage = agent.getWelcomeMessage();
+        MessageEntity messageEntity = new MessageEntity();
+        messageEntity.setRole(Role.SYSTEM);
+        messageEntity.setContent(welcomeMessage);
+        messageEntity.setSessionId(session.getId());
+        conversationDomainService.saveMessage(messageEntity);
+        return SessionAssembler.toDTO(session);
     }
 
 
@@ -98,10 +104,8 @@ public class AgentSessionAppService {
      */
     @Transactional
     public void deleteSession(String id, String userId) {
-        boolean deleteSession = sessionDomainService.deleteSession(id, userId);
-        if (!deleteSession){
-            throw new BusinessException("删除会话失败");
-        }
+        sessionDomainService.deleteSession(id, userId);
+
         // 删除会话下的消息
         conversationDomainService.deleteConversationMessages(id);
     }

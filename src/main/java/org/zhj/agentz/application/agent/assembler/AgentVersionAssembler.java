@@ -7,7 +7,9 @@ import org.zhj.agentz.domain.agent.model.AgentVersionEntity;
 import org.zhj.agentz.interfaces.dto.PublishAgentVersionRequest;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class AgentVersionAssembler {
 
@@ -63,4 +65,10 @@ public class AgentVersionAssembler {
         return AgentVersionEntity.createFromAgent(agent, request.getVersionNumber(), request.getChangeLog());
     }
 
+    public static List<AgentVersionDTO> toDTOs(List<AgentVersionEntity> agents) {
+        if (agents == null || agents.isEmpty()) {
+            return Collections.emptyList();
+        }
+        return agents.stream().map(AgentVersionAssembler::toDTO).collect(Collectors.toList());
+    }
 }

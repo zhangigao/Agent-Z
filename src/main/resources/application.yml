@@ -26,7 +26,7 @@ mybatis-plus:
       logic-not-delete-value: 0
 llm:
   provider:
-    default: ${LLM_DEFAULT_PROVIDER:siliconflow}
+
     providers:
       siliconflow:
         name: SiliconFlow

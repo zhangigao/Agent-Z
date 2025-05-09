@@ -4,13 +4,11 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import org.apache.ibatis.type.JdbcType;
-import org.zhj.agentz.infrastructure.converter.LLMModelConfigConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 
 
 /** Agent工作区实体类 用于记录用户添加到工作区的Agent */
-@TableName(value = "agent_workspace", autoResultMap = true)
+@TableName(value = "agent_workspace")
 public class AgentWorkspaceEntity extends BaseEntity {
 
     /** 主键ID */
@@ -25,29 +23,19 @@ public class AgentWorkspaceEntity extends BaseEntity {
     @TableField("user_id")
     private String userId;
 
-    /** 模型配置 */
-    @TableField(value = "llm_model_config", typeHandler = LLMModelConfigConverter.class, jdbcType = JdbcType.OTHER)
-    private LLMModelConfig llmModelConfig;
+    /**
+     * 模型id
+     */
+    @TableField("model_id")
+    private String modelId;
 
     public AgentWorkspaceEntity() {
     }
 
-    public AgentWorkspaceEntity(String agentId, String userId, LLMModelConfig llmModelConfig) {
+    public AgentWorkspaceEntity(String agentId, String userId, String modelId) {
         this.agentId = agentId;
         this.userId = userId;
-        this.llmModelConfig = llmModelConfig;
-    }
-
-    public LLMModelConfig getLlmModelConfig() {
-        // 兜底
-        if (llmModelConfig == null) {
-            llmModelConfig = new LLMModelConfig();
-        }
-        return llmModelConfig;
-    }
-
-    public void setLlmModelConfig(LLMModelConfig llmModelConfig) {
-        this.llmModelConfig = llmModelConfig;
+        this.modelId = modelId;
     }
 
     public String getId() {
@@ -74,4 +62,11 @@ public class AgentWorkspaceEntity extends BaseEntity {
         this.userId = userId;
     }
 
+    public String getModelId() {
+        return modelId;
+    }
+
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
+    }
 }

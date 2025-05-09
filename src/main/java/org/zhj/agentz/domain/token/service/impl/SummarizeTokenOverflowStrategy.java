@@ -177,14 +177,8 @@ public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
      * 生成摘要内容
      */
     private String generateSummary(List<TokenMessage> messages) {
-        String summarizeMessage = messages.stream().map(TokenMessage::getContent).collect(Collectors.joining());
-        String message = summarizeMessage + "\n请帮我把以上内容做个总结";
-        // 构建聊天请求对象
-        ChatRequest request = new ChatRequest();
-        request.setMessage(message);
-        // todo 这里不应该使用conversation服务发送，但是先这样吧
-        ChatResponse response = conversationDomainService.chat(request);
-        return response.getContent();
+        // TODO: 这里应该调用LLM生成摘要，目前返回简单描述
+        return String.format("这里是%d条历史消息的摘要", messages.size());
     }
 
     /**

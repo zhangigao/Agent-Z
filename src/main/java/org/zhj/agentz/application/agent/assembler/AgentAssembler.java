@@ -5,12 +5,16 @@ package org.zhj.agentz.application.agent.assembler;
 import org.zhj.agentz.domain.agent.constant.AgentType;
 import org.zhj.agentz.domain.agent.dto.AgentDTO;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
+import org.zhj.agentz.domain.agent.model.AgentModelConfig;
 import org.zhj.agentz.interfaces.dto.CreateAgentRequest;
+import org.zhj.agentz.interfaces.dto.SearchAgentsRequest;
 import org.zhj.agentz.interfaces.dto.UpdateAgentRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Agent领域对象组装器
@@ -21,7 +25,7 @@ public class AgentAssembler {
     /**
      * 将CreateAgentRequest转换为AgentEntity
      */
-    public static AgentEntity toEntity(CreateAgentRequest request, String userId) {
+    public static AgentEntity toEntity(CreateAgentRequest request,String userId) {
         AgentEntity entity = new AgentEntity();
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
@@ -36,6 +40,13 @@ public class AgentAssembler {
 
         // 设置初始状态为启用
         entity.setEnabled(true);
+
+        // 处理模型配置
+        if (request.getModelConfig() != null) {
+            entity.setModelConfig(request.getModelConfig());
+        } else {
+            entity.setModelConfig(AgentModelConfig.createDefault());
+        }
 
         // 设置工具和知识库ID
         entity.setTools(request.getTools() != null ? request.getTools() : new ArrayList<>());
@@ -54,13 +65,14 @@ public class AgentAssembler {
     /**
      * 将UpdateAgentRequest转换为AgentEntity
      */
-    public static AgentEntity toEntity(UpdateAgentRequest request, String userId) {
+    public static AgentEntity toEntity(UpdateAgentRequest request,String userId) {
         AgentEntity entity = new AgentEntity();
         entity.setName(request.getName());
         entity.setDescription(request.getDescription());
         entity.setAvatar(request.getAvatar());
         entity.setSystemPrompt(request.getSystemPrompt());
         entity.setWelcomeMessage(request.getWelcomeMessage());
+        entity.setModelConfig(request.getModelConfig());
         entity.setTools(request.getTools());
         entity.setKnowledgeBaseIds(request.getKnowledgeBaseIds());
         entity.setUserId(userId);
@@ -85,6 +97,8 @@ public class AgentAssembler {
         dto.setDescription(entity.getDescription());
         dto.setSystemPrompt(entity.getSystemPrompt());
         dto.setWelcomeMessage(entity.getWelcomeMessage());
+        dto.setModelConfig(entity.getModelConfig());
+        dto.setTools(entity.getTools());
         dto.setKnowledgeBaseIds(entity.getKnowledgeBaseIds());
         dto.setPublishedVersion(entity.getPublishedVersion());
         dto.setEnabled(entity.getEnabled());
@@ -96,23 +110,16 @@ public class AgentAssembler {
         return dto;
     }
 
-
-
-    /**
-     * 将AgentEntity列表转换为AgentDTO列表
-     */
-    public static List<AgentDTO> toDTOList(List<AgentEntity> entities) {
-        if (entities == null) {
-            return new ArrayList<>();
+    public static List<AgentDTO> toDTOs(List<AgentEntity> agents) {
+        if (agents == null || agents.isEmpty()) {
+            return Collections.emptyList();
         }
-
-        List<AgentDTO> dtoList = new ArrayList<>(entities.size());
-        for (AgentEntity entity : entities) {
-            dtoList.add(toDTO(entity));
-        }
-
-        return dtoList;
+        return agents.stream().map(AgentAssembler::toDTO).collect(Collectors.toList());
     }
 
-
+    public static AgentEntity toEntity(SearchAgentsRequest searchAgentsRequest) {
+        AgentEntity agentEntity = new AgentEntity();
+        agentEntity.setName(searchAgentsRequest.getName());
+        return agentEntity;
+    }
 }
