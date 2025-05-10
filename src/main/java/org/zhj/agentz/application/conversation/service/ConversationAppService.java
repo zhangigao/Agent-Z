@@ -137,7 +137,7 @@ public class ConversationAppService {
 
             @Override
             public void onCompleteResponse(ChatResponse completeResponse) {
-                // todo xhy 传出去
+                // todo 传出去
                 TokenUsage tokenUsage = completeResponse.metadata().tokenUsage();
 
                 Integer inputTokenCount = tokenUsage.inputTokenCount();

@@ -7,20 +7,20 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.zhj.agentz.application.agent.service.AgentSessionAppService;
 import org.zhj.agentz.application.conversation.dto.ChatRequest;
-import org.zhj.agentz.application.conversation.dto.StreamChatRequest;
 import org.zhj.agentz.application.conversation.service.ConversationAppService;
 import org.zhj.agentz.domain.conversation.dto.MessageDTO;
 import org.zhj.agentz.domain.conversation.dto.SessionDTO;
 import org.zhj.agentz.infrastructure.auth.UserContext;
 import org.zhj.agentz.interfaces.api.common.Result;
-import org.zhj.agentz.interfaces.dto.ConversationRequest;
 
 
-import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
+/**
+ * Agent会话管理
+ */
 @RestController
 @RequestMapping("/agent/session")
 public class PortalAgentSessionController {

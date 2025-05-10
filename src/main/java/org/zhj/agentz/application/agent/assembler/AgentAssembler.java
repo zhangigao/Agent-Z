@@ -3,12 +3,12 @@ package org.zhj.agentz.application.agent.assembler;
 
 
 import org.zhj.agentz.domain.agent.constant.AgentType;
-import org.zhj.agentz.domain.agent.dto.AgentDTO;
+import org.zhj.agentz.application.agent.dto.AgentDTO;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
 import org.zhj.agentz.domain.agent.model.AgentModelConfig;
-import org.zhj.agentz.interfaces.dto.CreateAgentRequest;
-import org.zhj.agentz.interfaces.dto.SearchAgentsRequest;
-import org.zhj.agentz.interfaces.dto.UpdateAgentRequest;
+import org.zhj.agentz.interfaces.dto.agent.CreateAgentRequest;
+import org.zhj.agentz.interfaces.dto.agent.SearchAgentsRequest;
+import org.zhj.agentz.interfaces.dto.agent.UpdateAgentRequest;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;

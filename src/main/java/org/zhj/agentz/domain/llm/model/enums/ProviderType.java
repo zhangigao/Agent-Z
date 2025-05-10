@@ -11,7 +11,7 @@ public enum ProviderType {
     OFFICIAL("official"),
 
     /** 用户自定义服务商 */
-    CUSTOM("custom");
+    USER("user");
 
     private final String code;
 

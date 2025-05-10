@@ -1,15 +1,17 @@
-package org.zhj.agentz.interfaces.dto;
+package org.zhj.agentz.interfaces.dto.agent;
 
-
-
+import jakarta.validation.constraints.NotBlank;
 import org.zhj.agentz.infrastructure.exception.ParamValidationException;
 
+
 import java.util.regex.Pattern;
+
 
 /**
  * 发布Agent版本请求
  */
 public class PublishAgentVersionRequest {
+    @NotBlank(message = "版本号不能为空")
     private String versionNumber;
     private String changeLog;
 
@@ -29,16 +31,12 @@ public class PublishAgentVersionRequest {
      * 校验请求参数
      */
     public void validate() {
-        if (versionNumber == null || versionNumber.isBlank()) {
-            throw new ParamValidationException("versionNumber", "版本号不能为空");
-        }
-
         // 验证版本号格式
         if (!VERSION_PATTERN.matcher(versionNumber).matches()) {
             throw new ParamValidationException("versionNumber", "版本号必须遵循 x.y.z 格式");
         }
 
-        if (changeLog == null || changeLog.isBlank()) {
+        if (changeLog == null || changeLog.trim().isEmpty()) {
             throw new ParamValidationException("changeLog", "变更日志不能为空");
         }
     }

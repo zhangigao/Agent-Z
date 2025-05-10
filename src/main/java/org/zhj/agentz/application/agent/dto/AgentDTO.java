@@ -1,4 +1,4 @@
-package org.zhj.agentz.domain.agent.dto;
+package org.zhj.agentz.application.agent.dto;
 
 
 

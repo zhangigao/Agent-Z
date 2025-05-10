@@ -29,18 +29,18 @@ import java.util.stream.Collectors;
  */
 @Service
 public class LLMDomainService {
-    
+
     private final ProviderRepository providerRepository;
     private final ModelRepository modelRepository;
 
     public LLMDomainService(
             ProviderRepository providerRepository,
             ModelRepository modelRepository
-            ) {
+    ) {
         this.providerRepository = providerRepository;
         this.modelRepository = modelRepository;
     }
-    
+
 
 
     /**
@@ -74,10 +74,10 @@ public class LLMDomainService {
     public List<ProviderAggregate> getUserProviders(String userId) {
         Wrapper<ProviderEntity> wrapper = Wrappers.<ProviderEntity>lambdaQuery().eq(ProviderEntity::getUserId, userId);
         List<ProviderEntity> providers = providerRepository.selectList(wrapper);
-        
+
         return buildProviderAggregatesWithActiveModels(providers);
     }
-    
+
     /**
      * 获取所有服务商（包含官方和用户自定义）
      * @param userId 用户ID
@@ -89,10 +89,10 @@ public class LLMDomainService {
                 .or()
                 .eq(ProviderEntity::getIsOfficial, true);
         List<ProviderEntity> providers = providerRepository.selectList(wrapper);
-        
+
         return buildProviderAggregatesWithActiveModels(providers);
     }
-    
+
     /**
      * 获取官方服务商
      * @return 官方服务商聚合根列表
@@ -101,10 +101,10 @@ public class LLMDomainService {
         Wrapper<ProviderEntity> wrapper = Wrappers.<ProviderEntity>lambdaQuery()
                 .eq(ProviderEntity::getIsOfficial, true);
         List<ProviderEntity> providers = providerRepository.selectList(wrapper);
-        
+
         return buildProviderAggregatesWithActiveModels(providers);
     }
-    
+
     /**
      * 获取用户自定义服务商
      * @param userId 用户ID
@@ -115,10 +115,10 @@ public class LLMDomainService {
                 .eq(ProviderEntity::getUserId, userId)
                 .eq(ProviderEntity::getIsOfficial, false);
         List<ProviderEntity> providers = providerRepository.selectList(wrapper);
-        
+
         return buildProviderAggregatesWithActiveModels(providers);
     }
-    
+
     /**
      * 构建服务商聚合根，只包含激活的模型
      * @param providers 服务商列表
@@ -129,7 +129,7 @@ public class LLMDomainService {
         if (providers == null || providers.isEmpty()) {
             return providerAggregates;
         }
-        
+
         // 收集服务商id
         List<String> providerIds = providers.stream().map(ProviderEntity::getId).collect(Collectors.toList());
         // 查询激活的模型
@@ -141,7 +141,7 @@ public class LLMDomainService {
         // 转为map，映射关系
         Map<String, List<ModelEntity>> modelMap = activeModels.stream()
                 .collect(Collectors.groupingBy(ModelEntity::getProviderId));
-        
+
         // 遍历服务商，创建聚合根，设置模型
         for (ProviderEntity provider : providers) {
             List<ModelEntity> modelList = modelMap.get(provider.getId());
@@ -177,7 +177,7 @@ public class LLMDomainService {
             return null;
         }
         return provider;
-    }   
+    }
 
     // 检查服务商是否存在
     public void checkProviderExists(String providerId,String userId) {
@@ -187,14 +187,14 @@ public class LLMDomainService {
             throw new BusinessException("服务商不存在");
         }
     }
-    
+
     // 获取服务商聚合根
     public ProviderAggregate getProviderAggregate(String providerId, String userId) {
         // 获取服务商
         ProviderEntity provider = getProvider(providerId, userId);
         // 获取服务商下的激活模型列表
         List<ModelEntity> modelList = getActiveModelList(providerId, userId);
-        
+
         return new ProviderAggregate(provider, modelList);
     }
 
@@ -205,7 +205,7 @@ public class LLMDomainService {
                 .eq(ModelEntity::getUserId, userId);
         return modelRepository.selectList(wrapper);
     }
-    
+
     /**
      * 获取激活的模型列表
      * @param providerId 服务商ID
@@ -245,7 +245,7 @@ public class LLMDomainService {
             throw new BusinessException("不支持的服务商协议类型: " + protocol);
         }
     }
-    
+
     /**
      * 检查是否是支持的服务商协议
      * @param protocol 服务商提供商编码
@@ -277,8 +277,8 @@ public class LLMDomainService {
      * @param model 模型信息
      */
     public void updateModel(ModelEntity model) {
-        Wrapper<ModelEntity> wrapper = 
-        Wrappers.<ModelEntity>lambdaQuery().eq(ModelEntity::getId, model.getId()).eq(ModelEntity::getUserId, model.getUserId());
+        Wrapper<ModelEntity> wrapper =
+                Wrappers.<ModelEntity>lambdaQuery().eq(ModelEntity::getId, model.getId()).eq(ModelEntity::getUserId, model.getUserId());
         modelRepository.checkedUpdate(model, wrapper);
     }
 
@@ -287,8 +287,8 @@ public class LLMDomainService {
      * @param modelId 模型id
      */
     public void deleteModel(String modelId,String userId,Operator operator) {
-        Wrapper<ModelEntity> wrapper = 
-        Wrappers.<ModelEntity>lambdaQuery().eq(ModelEntity::getId, modelId).eq(operator.needCheckUserId(),ModelEntity::getUserId, userId);
+        Wrapper<ModelEntity> wrapper =
+                Wrappers.<ModelEntity>lambdaQuery().eq(ModelEntity::getId, modelId).eq(operator.needCheckUserId(),ModelEntity::getUserId, userId);
         modelRepository.checkedDelete(wrapper);
     }
 
@@ -302,7 +302,7 @@ public class LLMDomainService {
                 .eq(ModelEntity::getId, modelId)
                 .eq(ModelEntity::getUserId, userId)
                 .setSql("status = NOT status");
-        
+
         modelRepository.checkedUpdate(updateWrapper);
     }
 
@@ -319,7 +319,7 @@ public class LLMDomainService {
             case OFFICIAL:
                 wrapper.eq(ProviderEntity::getIsOfficial, true);
                 break;
-            case CUSTOM:
+            case USER:
                 wrapper.eq(ProviderEntity::getUserId, userId)
                         .eq(ProviderEntity::getIsOfficial, false);
                 break;

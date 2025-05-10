@@ -1,4 +1,4 @@
-package org.zhj.agentz.interfaces.dto;
+package org.zhj.agentz.interfaces.dto.agent;
 
 /**
  * 搜索Agent的请求对象

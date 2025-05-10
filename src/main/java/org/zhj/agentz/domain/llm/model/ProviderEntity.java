@@ -1,15 +1,15 @@
 package org.zhj.agentz.domain.llm.model;
 
-import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
-import com.baomidou.mybatisplus.annotation.TableId;
-import com.baomidou.mybatisplus.annotation.TableName;
+import com.baomidou.mybatisplus.annotation.*;
 import org.zhj.agentz.domain.llm.model.config.ProviderConfig;
 import org.zhj.agentz.infrastructure.converter.ProviderConfigConverter;
 import org.zhj.agentz.infrastructure.converter.ProviderProtocolConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
 import org.zhj.agentz.infrastructure.llm.protocol.enums.ProviderProtocol;
+import org.zhj.agentz.infrastructure.utils.EncryptUtils;
+
+import java.time.LocalDateTime;
 
 /** 服务提供商领域模型 */
 @TableName("providers")
@@ -19,7 +19,6 @@ public class ProviderEntity extends BaseEntity {
     private String id;
 
     private String userId;
-
     @TableField(typeHandler = ProviderProtocolConverter.class)
     private ProviderProtocol protocol;
     private String name;
@@ -31,12 +30,77 @@ public class ProviderEntity extends BaseEntity {
     private Boolean isOfficial;
     private Boolean status;
 
+    @TableField(fill = FieldFill.INSERT)
+    private LocalDateTime createdAt;
+
+    @TableField(fill = FieldFill.INSERT_UPDATE)
+    private LocalDateTime updatedAt;
+
+    @TableLogic(
+            value = "NULL",
+            delval = "NOW()"
+    )
+    private LocalDateTime deletedAt;
+
+    /**
+     * 设置配置并自动加密敏感信息
+     *
+     * @param config 未加密的配置
+     */
     public void setConfig(ProviderConfig config) {
         this.config = config;
+        if (config != null) {
+            encryptConfigFields();
+        }
     }
 
+    /**
+     * 获取原始配置（不解密）
+     *
+     * @return 原始配置（可能已加密）
+     */
+    public ProviderConfig getEncryptedConfig() {
+        return this.config;
+    }
+
+    /**
+     * 获取配置（自动解密敏感信息）
+     *
+     * @return 解密后的配置
+     */
     public ProviderConfig getConfig() {
-        return config;
+        return getDecryptedConfig();
+    }
+
+    /**
+     * 加密配置中的敏感字段
+     */
+    private void encryptConfigFields() {
+        if (config != null) {
+            if (config.getApiKey() != null) {
+                config.setApiKey(EncryptUtils.encrypt(config.getApiKey()));
+            }
+        }
+    }
+
+    /**
+     * 解密配置中的敏感字段
+     *
+     * @return 解密后的配置对象的副本
+     */
+    public ProviderConfig getDecryptedConfig() {
+        if (config != null) {
+            ProviderConfig decryptedConfig = new ProviderConfig();
+            // 复制基本属性
+            decryptedConfig.setBaseUrl(this.config.getBaseUrl());
+
+            // 解密敏感信息
+            if (this.config.getApiKey() != null) {
+                decryptedConfig.setApiKey(EncryptUtils.decrypt(this.config.getApiKey()));
+            }
+            return decryptedConfig;
+        }
+        return null;
     }
 
     public String getId() {
@@ -95,8 +159,32 @@ public class ProviderEntity extends BaseEntity {
         this.status = status;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public LocalDateTime getUpdatedAt() {
+        return updatedAt;
+    }
+
+    public void setUpdatedAt(LocalDateTime updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public LocalDateTime getDeletedAt() {
+        return deletedAt;
+    }
+
+    public void setDeletedAt(LocalDateTime deletedAt) {
+        this.deletedAt = deletedAt;
+    }
+
     public void isActive() {
-        if (!status) {
+        if (!status){
             throw new BusinessException("服务商未激活");
         }
     }

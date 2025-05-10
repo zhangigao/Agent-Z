@@ -5,15 +5,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.zhj.agentz.application.agent.assembler.AgentAssembler;
 import org.zhj.agentz.application.agent.assembler.AgentVersionAssembler;
 import org.zhj.agentz.domain.agent.constant.PublishStatus;
-import org.zhj.agentz.domain.agent.dto.AgentDTO;
-import org.zhj.agentz.domain.agent.dto.AgentVersionDTO;
+import org.zhj.agentz.application.agent.dto.AgentDTO;
+import org.zhj.agentz.application.agent.dto.AgentVersionDTO;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
 import org.zhj.agentz.domain.agent.model.AgentVersionEntity;
 import org.zhj.agentz.domain.agent.model.AgentWorkspaceEntity;
 import org.zhj.agentz.domain.service.AgentDomainService;
 import org.zhj.agentz.domain.service.AgentWorkspaceDomainService;
 import org.zhj.agentz.infrastructure.exception.ParamValidationException;
-import org.zhj.agentz.interfaces.dto.*;
+import org.zhj.agentz.interfaces.dto.agent.*;
 
 import java.util.List;
 

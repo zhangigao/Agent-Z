@@ -1,10 +1,7 @@
 package org.zhj.agentz.interfaces.dto;
 
-public class ConversationRequest {
-
-
+public class ChatRequest {
     private String message;
-
 
     public String getMessage() {
         return message;
@@ -13,5 +10,4 @@ public class ConversationRequest {
     public void setMessage(String message) {
         this.message = message;
     }
-
-}
+} 

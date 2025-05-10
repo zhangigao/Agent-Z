@@ -4,8 +4,6 @@ import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
-import org.zhj.agentz.application.agent.assembler.AgentAssembler;
-import org.zhj.agentz.domain.agent.dto.AgentDTO;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
 import org.zhj.agentz.domain.agent.model.AgentWorkspaceEntity;
 import org.zhj.agentz.domain.agent.repository.AgentRepository;

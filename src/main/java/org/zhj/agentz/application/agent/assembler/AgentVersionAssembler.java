@@ -1,10 +1,10 @@
 package org.zhj.agentz.application.agent.assembler;
 
 
-import org.zhj.agentz.domain.agent.dto.AgentVersionDTO;
+import org.zhj.agentz.application.agent.dto.AgentVersionDTO;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
 import org.zhj.agentz.domain.agent.model.AgentVersionEntity;
-import org.zhj.agentz.interfaces.dto.PublishAgentVersionRequest;
+import org.zhj.agentz.interfaces.dto.agent.PublishAgentVersionRequest;
 
 import java.util.ArrayList;
 import java.util.Collections;

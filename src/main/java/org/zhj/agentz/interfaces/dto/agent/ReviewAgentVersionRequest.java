@@ -1,4 +1,4 @@
-package org.zhj.agentz.interfaces.dto;
+package org.zhj.agentz.interfaces.dto.agent;
 
 
 import org.zhj.agentz.domain.agent.constant.PublishStatus;

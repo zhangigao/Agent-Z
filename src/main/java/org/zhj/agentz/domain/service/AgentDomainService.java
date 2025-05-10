@@ -16,7 +16,6 @@ import org.zhj.agentz.domain.agent.repository.AgentRepository;
 import org.zhj.agentz.domain.agent.repository.AgentVersionRepository;
 import org.zhj.agentz.domain.agent.repository.AgentWorkspaceRepository;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
-import org.zhj.agentz.interfaces.dto.SearchAgentsRequest;
 
 import java.util.Collections;
 import java.util.List;

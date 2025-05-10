@@ -5,7 +5,9 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import org.apache.ibatis.type.JdbcType;
+import org.zhj.agentz.domain.agent.model.LLMModelConfig;
 import org.zhj.agentz.domain.llm.model.enums.ModelType;
+import org.zhj.agentz.infrastructure.converter.ModelConfigConverter;
 import org.zhj.agentz.infrastructure.converter.ModelTypeConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
@@ -27,6 +29,9 @@ public class ModelEntity extends BaseEntity {
 
     @TableField(typeHandler = ModelTypeConverter.class, jdbcType = JdbcType.VARCHAR)
     private ModelType type;
+
+    @TableField(typeHandler = ModelConfigConverter.class)
+    private LLMModelConfig config;
 
     private Boolean status;
 
@@ -100,6 +105,14 @@ public class ModelEntity extends BaseEntity {
 
     public void setOfficial(Boolean official) {
         isOfficial = official;
+    }
+
+    public LLMModelConfig getConfig() {
+        return config;
+    }
+
+    public void setConfig(LLMModelConfig config) {
+        this.config = config;
     }
 
     public void isActive() {

@@ -3,19 +3,19 @@ package org.zhj.agentz.interfaces.api.portal.agent;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhj.agentz.application.agent.service.AgentAppService;
-import org.zhj.agentz.domain.agent.dto.AgentDTO;
-import org.zhj.agentz.domain.agent.dto.AgentVersionDTO;
+import org.zhj.agentz.application.agent.dto.AgentDTO;
+import org.zhj.agentz.application.agent.dto.AgentVersionDTO;
 import org.zhj.agentz.infrastructure.auth.UserContext;
 import org.zhj.agentz.interfaces.api.common.Result;
-import org.zhj.agentz.interfaces.dto.CreateAgentRequest;
-import org.zhj.agentz.interfaces.dto.PublishAgentVersionRequest;
-import org.zhj.agentz.interfaces.dto.SearchAgentsRequest;
-import org.zhj.agentz.interfaces.dto.UpdateAgentRequest;
+import org.zhj.agentz.interfaces.dto.agent.CreateAgentRequest;
+import org.zhj.agentz.interfaces.dto.agent.PublishAgentVersionRequest;
+import org.zhj.agentz.interfaces.dto.agent.SearchAgentsRequest;
+import org.zhj.agentz.interfaces.dto.agent.UpdateAgentRequest;
 
 import java.util.List;
 
 /**
- * 前台用户Agent管理API控制器
+ * 用户Agent管理
  */
 @RestController
 @RequestMapping("/agent")
