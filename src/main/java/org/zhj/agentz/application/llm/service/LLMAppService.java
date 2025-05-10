@@ -73,7 +73,7 @@ public class LLMAppService {
      * @return ProviderDTO
      */
     public ProviderDTO getProvider(String providerId, String userId) {
-        ProviderEntity provider = llmDomainService.getProvider(providerId,userId);
+        ProviderEntity provider = llmDomainService.getProvider(providerId);
         return ProviderAssembler.toDTO(provider);
     }
 

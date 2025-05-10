@@ -50,7 +50,7 @@ public class SlidingWindowTokenOverflowStrategy implements TokenOverflowStrategy
      * @return 处理后保留的消息列表
      */
     @Override
-    public TokenProcessResult process(List<TokenMessage> messages) {
+    public TokenProcessResult process(List<TokenMessage> messages,TokenOverflowConfig config) {
         if (!needsProcessing(messages)) {
             TokenProcessResult result = new TokenProcessResult();
             result.setRetainedMessages(messages);

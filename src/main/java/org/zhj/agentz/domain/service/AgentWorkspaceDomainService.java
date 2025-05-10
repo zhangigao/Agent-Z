@@ -2,6 +2,7 @@ package org.zhj.agentz.domain.service;
 
 import com.baomidou.mybatisplus.core.conditions.Wrapper;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.conditions.update.LambdaUpdateWrapper;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import org.springframework.stereotype.Service;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
@@ -74,10 +75,15 @@ public class AgentWorkspaceDomainService {
         return agentWorkspaceRepository.selectOne(wrapper);
     }
 
-    public void save(AgentWorkspaceEntity workspace) {
-        boolean b = agentWorkspaceRepository.insertOrUpdate(workspace);
-        if (!b){
-            throw new BusinessException("保存失败");
-        }
+    public void save(AgentWorkspaceEntity workspace){
+
+        agentWorkspaceRepository.checkInsert(workspace);
+    }
+
+    public void update(AgentWorkspaceEntity workspace) {
+        LambdaUpdateWrapper<AgentWorkspaceEntity> wrapper = Wrappers.<AgentWorkspaceEntity>lambdaUpdate()
+                .eq(AgentWorkspaceEntity::getAgentId, workspace.getAgentId())
+                .eq(AgentWorkspaceEntity::getAgentId, workspace.getAgentId());
+        agentWorkspaceRepository.checkedUpdate(workspace,wrapper);
     }
 }

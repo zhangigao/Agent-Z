@@ -2,6 +2,7 @@ package org.zhj.agentz.domain.token.model.config;
 
 import org.springframework.stereotype.Service;
 import org.zhj.agentz.domain.shared.enums.TokenOverflowStrategyEnum;
+import org.zhj.agentz.infrastructure.llm.config.ProviderConfig;
 
 /**
  * Token超限处理配置基础类
@@ -32,6 +33,9 @@ public class TokenOverflowConfig {
      * 摘要触发阈值（消息数量），适用于摘要策略
      */
     private Integer summaryThreshold;
+
+    private ProviderConfig providerConfig;
+
 
     /**
      * 默认构造函数
@@ -89,6 +93,14 @@ public class TokenOverflowConfig {
 
     public void setSummaryThreshold(Integer summaryThreshold) {
         this.summaryThreshold = summaryThreshold;
+    }
+
+    public ProviderConfig getProviderConfig() {
+        return providerConfig;
+    }
+
+    public void setProviderConfig(ProviderConfig providerConfig) {
+        this.providerConfig = providerConfig;
     }
 
     /**

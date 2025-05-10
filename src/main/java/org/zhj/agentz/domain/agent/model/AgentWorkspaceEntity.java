@@ -4,38 +4,58 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import org.apache.ibatis.type.JdbcType;
+import org.zhj.agentz.infrastructure.converter.LLMModelConfigConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 
 
 /** Agent工作区实体类 用于记录用户添加到工作区的Agent */
-@TableName(value = "agent_workspace")
+@TableName(value = "agent_workspace", autoResultMap = true)
 public class AgentWorkspaceEntity extends BaseEntity {
 
-    /** 主键ID */
+    /**
+     * 主键ID
+     */
     @TableId(value = "id", type = IdType.ASSIGN_UUID)
     private String id;
 
-    /** Agent ID */
+    /**
+     * Agent ID
+     */
     @TableField("agent_id")
     private String agentId;
 
-    /** 用户ID */
+    /**
+     * 用户ID
+     */
     @TableField("user_id")
     private String userId;
 
     /**
-     * 模型id
+     * 模型配置
      */
-    @TableField("model_id")
-    private String modelId;
+    @TableField(value = "llm_model_config", typeHandler = LLMModelConfigConverter.class, jdbcType = JdbcType.OTHER)
+    private LLMModelConfig llmModelConfig;
 
     public AgentWorkspaceEntity() {
     }
 
-    public AgentWorkspaceEntity(String agentId, String userId, String modelId) {
+    public AgentWorkspaceEntity(String agentId, String userId, LLMModelConfig llmModelConfig) {
         this.agentId = agentId;
         this.userId = userId;
-        this.modelId = modelId;
+        this.llmModelConfig = llmModelConfig;
+    }
+
+    public LLMModelConfig getLlmModelConfig() {
+        // 兜底
+        if (llmModelConfig == null){
+            llmModelConfig = new LLMModelConfig();
+        }
+        return llmModelConfig;
+    }
+
+    public void setLlmModelConfig(LLMModelConfig llmModelConfig) {
+        this.llmModelConfig = llmModelConfig;
     }
 
     public String getId() {
@@ -62,11 +82,4 @@ public class AgentWorkspaceEntity extends BaseEntity {
         this.userId = userId;
     }
 
-    public String getModelId() {
-        return modelId;
-    }
-
-    public void setModelId(String modelId) {
-        this.modelId = modelId;
-    }
 }

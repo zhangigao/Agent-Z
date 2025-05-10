@@ -39,7 +39,7 @@ public class TokenOverflowStrategyFactory {
         }
         return switch (strategyType) {
             case SLIDING_WINDOW -> new SlidingWindowTokenOverflowStrategy(config);
-            case SUMMARIZE -> new SummarizeTokenOverflowStrategy(config, conversationDomainService);
+            case SUMMARIZE -> new SummarizeTokenOverflowStrategy(config);
             default -> new NoTokenOverflowStrategy();
         };
     }

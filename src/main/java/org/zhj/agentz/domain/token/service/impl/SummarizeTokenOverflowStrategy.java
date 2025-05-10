@@ -1,19 +1,22 @@
 package org.zhj.agentz.domain.token.service.impl;
 
-import org.zhj.agentz.application.conversation.dto.ChatRequest;
-import org.zhj.agentz.application.conversation.dto.ChatResponse;
+import dev.langchain4j.data.message.Content;
+import dev.langchain4j.data.message.SystemMessage;
+import dev.langchain4j.data.message.TextContent;
+import dev.langchain4j.data.message.UserMessage;
+import dev.langchain4j.model.chat.ChatLanguageModel;
+import dev.langchain4j.model.chat.response.ChatResponse;
 import org.zhj.agentz.domain.conversation.service.ConversationDomainService;
 import org.zhj.agentz.domain.shared.enums.TokenOverflowStrategyEnum;
 import org.zhj.agentz.domain.token.model.TokenMessage;
 import org.zhj.agentz.domain.token.model.TokenProcessResult;
 import org.zhj.agentz.domain.token.model.config.TokenOverflowConfig;
 import org.zhj.agentz.domain.token.service.TokenOverflowStrategy;
+import org.zhj.agentz.infrastructure.llm.LLMProviderService;
+import org.zhj.agentz.infrastructure.llm.config.ProviderConfig;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -27,16 +30,6 @@ import java.util.stream.Collectors;
 public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
 
     /**
-     * 默认摘要触发阈值（消息数量）
-     */
-    private static final int DEFAULT_SUMMARY_THRESHOLD = 20;
-
-    /**
-     * 默认最大Token数
-     */
-    private static final int DEFAULT_MAX_TOKENS = 4096;
-
-    /**
      * 摘要消息的特殊角色标识
      */
     private static final String SUMMARY_ROLE = "summary";
@@ -45,11 +38,6 @@ public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
      * 策略配置
      */
     private final TokenOverflowConfig config;
-
-    /**
-     * 对话服务实现
-     */
-    private final ConversationDomainService conversationDomainService;
 
     /**
      * 需要进行摘要的消息
@@ -66,11 +54,10 @@ public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
      *
      * @param config 策略配置
      */
-    public SummarizeTokenOverflowStrategy(TokenOverflowConfig config,ConversationDomainService conversationDomainService) {
+    public SummarizeTokenOverflowStrategy(TokenOverflowConfig config) {
         this.config = config;
         this.messagesToSummarize = new ArrayList<>();
         this.summaryMessage = null;
-        this.conversationDomainService = conversationDomainService;
     }
 
     /**
@@ -81,7 +68,7 @@ public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
      * @return 处理后的消息列表（包含摘要消息+保留的消息）
      */
     @Override
-    public TokenProcessResult process(List<TokenMessage> messages) {
+    public TokenProcessResult  process(List<TokenMessage> messages,TokenOverflowConfig tokenOverflowConfig) {
         if (!needsProcessing(messages)) {
             TokenProcessResult result = new TokenProcessResult();
             result.setRetainedMessages(messages);
@@ -105,7 +92,7 @@ public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
         );
 
         // 生成摘要消息
-        String summary = generateSummary(messagesToSummarize);
+        String summary = generateSummary(messagesToSummarize,tokenOverflowConfig);
         summaryMessage = createSummaryMessage(summary);
 
         // 将摘要消息添加到保留消息列表的开头
@@ -176,9 +163,24 @@ public class SummarizeTokenOverflowStrategy implements TokenOverflowStrategy {
     /**
      * 生成摘要内容
      */
-    private String generateSummary(List<TokenMessage> messages) {
-        // TODO: 这里应该调用LLM生成摘要，目前返回简单描述
-        return String.format("这里是%d条历史消息的摘要", messages.size());
+    private String generateSummary(List<TokenMessage> messages,TokenOverflowConfig tokenOverflowConfig) {
+
+        ProviderConfig providerConfig = tokenOverflowConfig.getProviderConfig();
+
+        // 使用当前服务商调用大模型
+        ChatLanguageModel chatLanguageModel = LLMProviderService.getNormal(providerConfig.getProtocol(), providerConfig);
+        SystemMessage systemMessage = new SystemMessage(  "你是一个专业的对话摘要生成器，请严格按照以下要求工作：\n" +
+                "1. 只基于提供的对话内容生成客观摘要，不得添加任何原对话中没有的信息\n" +
+                "2. 特别关注：用户问题、回答中的关键信息、重要事实\n" +
+                "3. 去除所有寒暄、表情符号和情感表达\n" +
+                "4. 使用简洁的第三人称陈述句\n" +
+                "5. 保持时间顺序和逻辑关系\n" +
+                "6. 示例格式：[用户]问... [AI]回答...\n" +
+                "禁止使用任何表情符号或拟人化表达");
+        List<Content> contents = messages.stream().map(message -> new TextContent(message.getContent())).collect(Collectors.toList());
+        UserMessage userMessage = new UserMessage(contents);
+        ChatResponse chatResponse = chatLanguageModel.chat(Arrays.asList(systemMessage,userMessage));
+        return chatResponse.aiMessage().text();
     }
 
     /**

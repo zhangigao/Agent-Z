@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
  * 模型对象转换器
  */
 public class ModelAssembler {
-    
+
 
     /**
      * 将领域对象转换为DTO
@@ -24,7 +24,7 @@ public class ModelAssembler {
         if (model == null) {
             return null;
         }
-        
+
         ModelDTO dto = new ModelDTO();
         dto.setId(model.getId());
         dto.setUserId(model.getUserId());
@@ -33,14 +33,13 @@ public class ModelAssembler {
         dto.setName(model.getName());
         dto.setDescription(model.getDescription());
         dto.setType(model.getType());
-        dto.setConfig(model.getConfig());
         dto.setStatus(model.getStatus());
         dto.setCreatedAt(model.getCreatedAt());
         dto.setUpdatedAt(model.getUpdatedAt());
         dto.setIsOfficial(model.getOfficial());
         return dto;
     }
-    
+
     /**
      * 将多个领域对象转换为DTO列表
      */
@@ -52,7 +51,7 @@ public class ModelAssembler {
                 .map(ModelAssembler::toDTO)
                 .collect(Collectors.toList());
     }
-    
+
     /**
      * 将创建请求转换为领域对象
      */
@@ -64,10 +63,9 @@ public class ModelAssembler {
         model.setName(request.getName());
         model.setDescription(request.getDescription());
         model.setType(request.getType());
-        model.setConfig(request.getConfig());
         model.setCreatedAt(LocalDateTime.now());
         model.setUpdatedAt(LocalDateTime.now());
-        
+
         return model;
     }
 
@@ -78,7 +76,6 @@ public class ModelAssembler {
         model.setName(request.getName());
         model.setDescription(request.getDescription());
         model.setModelId(request.getModelId());
-        model.setConfig(request.getConfig());
         model.setCreatedAt(LocalDateTime.now());
         model.setUpdatedAt(LocalDateTime.now());
         model.setId(request.getId());

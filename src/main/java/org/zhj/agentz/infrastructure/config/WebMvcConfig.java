@@ -1,6 +1,7 @@
 package org.zhj.agentz.infrastructure.config;
 
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.servlet.config.annotation.AsyncSupportConfigurer;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.zhj.agentz.infrastructure.auth.UserAuthInterceptor;
@@ -28,6 +29,18 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addPathPatterns("/**")
                 // 排除不需要鉴权的路径，例如登录、注册等
                 .excludePathPatterns("/api/auth/login", "/api/auth/register");
+    }
+
+    /**
+     * 配置异步请求处理
+     * 设置默认的异步请求超时时间
+     */
+    @Override
+    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
+        // 设置异步请求超时时间为5分钟
+        configurer.setDefaultTimeout(300000);
+        // 设置任务执行器
+        // configurer.setTaskExecutor(...); // 如果需要自定义线程池可以在这里设置
     }
 
 }

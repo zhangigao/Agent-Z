@@ -1,7 +1,5 @@
 package org.zhj.agentz.application.agent.assembler;
 
-
-
 import org.zhj.agentz.domain.agent.constant.AgentType;
 import org.zhj.agentz.application.agent.dto.AgentDTO;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
@@ -9,7 +7,6 @@ import org.zhj.agentz.domain.agent.model.AgentModelConfig;
 import org.zhj.agentz.interfaces.dto.agent.CreateAgentRequest;
 import org.zhj.agentz.interfaces.dto.agent.SearchAgentsRequest;
 import org.zhj.agentz.interfaces.dto.agent.UpdateAgentRequest;
-
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -41,12 +38,6 @@ public class AgentAssembler {
         // 设置初始状态为启用
         entity.setEnabled(true);
 
-        // 处理模型配置
-        if (request.getModelConfig() != null) {
-            entity.setModelConfig(request.getModelConfig());
-        } else {
-            entity.setModelConfig(AgentModelConfig.createDefault());
-        }
 
         // 设置工具和知识库ID
         entity.setTools(request.getTools() != null ? request.getTools() : new ArrayList<>());
@@ -72,11 +63,11 @@ public class AgentAssembler {
         entity.setAvatar(request.getAvatar());
         entity.setSystemPrompt(request.getSystemPrompt());
         entity.setWelcomeMessage(request.getWelcomeMessage());
-        entity.setModelConfig(request.getModelConfig());
         entity.setTools(request.getTools());
         entity.setKnowledgeBaseIds(request.getKnowledgeBaseIds());
         entity.setUserId(userId);
         entity.setEnabled(request.getEnabled());
+        entity.setId(request.getAgentId());
 
         return entity;
     }
@@ -97,7 +88,6 @@ public class AgentAssembler {
         dto.setDescription(entity.getDescription());
         dto.setSystemPrompt(entity.getSystemPrompt());
         dto.setWelcomeMessage(entity.getWelcomeMessage());
-        dto.setModelConfig(entity.getModelConfig());
         dto.setTools(entity.getTools());
         dto.setKnowledgeBaseIds(entity.getKnowledgeBaseIds());
         dto.setPublishedVersion(entity.getPublishedVersion());

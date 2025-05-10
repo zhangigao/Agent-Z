@@ -1,10 +1,13 @@
 package org.zhj.agentz.interfaces.api.portal.agent;
 
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.zhj.agentz.application.agent.dto.AgentDTO;
 import org.zhj.agentz.application.agent.service.AgentWorkspaceAppService;
+import org.zhj.agentz.domain.agent.model.LLMModelConfig;
 import org.zhj.agentz.infrastructure.auth.UserContext;
 import org.zhj.agentz.interfaces.api.common.Result;
+import org.zhj.agentz.interfaces.dto.agent.request.UpdateModelConfigRequest;
 
 
 import java.util.HashMap;
@@ -49,15 +52,15 @@ public class PortalWorkspaceController {
     }
 
     /**
-     * 设置agent的模型
-     * @param modelId 模型id
+     * 设置agent的模型配置
+     * @param config 模型配置
      * @param agentId agentId
      * @return
      */
-    @PutMapping("/{agentId}/model/{modelId}")
-    public Result<Void> saveModelId(@PathVariable String modelId,@PathVariable String agentId){
+    @PutMapping("/{agentId}/model/config")
+    public Result<Void> saveModelConfig(@RequestBody @Validated UpdateModelConfigRequest config, @PathVariable String agentId){
         String userId = UserContext.getCurrentUserId();
-        agentWorkspaceAppService.saveModel(agentId,userId,modelId);
+        agentWorkspaceAppService.updateModelConfig(agentId, userId, config);
         return Result.success();
     }
 
@@ -66,12 +69,9 @@ public class PortalWorkspaceController {
      * @param agentId agentId
      * @return
      */
-    @GetMapping("/{agentId}/model")
-    public Result<Map<String, Object>> getConfiguredModelId(@PathVariable String agentId){
+    @GetMapping("/{agentId}/model-config")
+    public Result<LLMModelConfig> getConfiguredModelId(@PathVariable String agentId){
         String userId = UserContext.getCurrentUserId();
-        String modelId = agentWorkspaceAppService.getConfiguredModelId(agentId,userId);
-        Map<String, Object> result = new HashMap<>();
-        result.put("modelId", modelId);
-        return Result.success(result);
+        return Result.success(agentWorkspaceAppService.getConfiguredModelId(agentId,userId));
     }
 }

@@ -38,7 +38,7 @@ public class NoTokenOverflowStrategy implements TokenOverflowStrategy {
      * @return 原消息列表，不做修改
      */
     @Override
-    public TokenProcessResult process(List<TokenMessage> messages) {
+    public TokenProcessResult process(List<TokenMessage> messages,TokenOverflowConfig config) {
         TokenProcessResult result = new TokenProcessResult();
         result.setRetainedMessages(messages);
         result.setStrategyName(getName());
