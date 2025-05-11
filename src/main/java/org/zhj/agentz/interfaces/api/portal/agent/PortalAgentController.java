@@ -7,10 +7,10 @@ import org.zhj.agentz.application.agent.dto.AgentDTO;
 import org.zhj.agentz.application.agent.dto.AgentVersionDTO;
 import org.zhj.agentz.infrastructure.auth.UserContext;
 import org.zhj.agentz.interfaces.api.common.Result;
-import org.zhj.agentz.interfaces.dto.agent.CreateAgentRequest;
-import org.zhj.agentz.interfaces.dto.agent.PublishAgentVersionRequest;
-import org.zhj.agentz.interfaces.dto.agent.SearchAgentsRequest;
-import org.zhj.agentz.interfaces.dto.agent.UpdateAgentRequest;
+import org.zhj.agentz.interfaces.dto.agent.request.CreateAgentRequest;
+import org.zhj.agentz.interfaces.dto.agent.request.PublishAgentVersionRequest;
+import org.zhj.agentz.interfaces.dto.agent.request.SearchAgentsRequest;
+import org.zhj.agentz.interfaces.dto.agent.request.UpdateAgentRequest;
 
 import java.util.List;
 

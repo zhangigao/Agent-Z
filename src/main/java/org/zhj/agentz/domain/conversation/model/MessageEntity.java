@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.*;
 import org.zhj.agentz.domain.conversation.constant.MessageType;
 import org.zhj.agentz.domain.conversation.constant.Role;
 import org.zhj.agentz.infrastructure.converter.MessageTypeConverter;
+import org.zhj.agentz.infrastructure.converter.RoleConverter;
 import org.zhj.agentz.infrastructure.entity.BaseEntity;
 
 import java.time.LocalDateTime;
@@ -22,7 +23,7 @@ public class MessageEntity extends BaseEntity {
     private String sessionId;
 
     /** 消息角色 (user, assistant, system) */
-    //@TableField(value = "role", typeHandler = RoleConverter.class)
+    @TableField(value = "role", typeHandler = RoleConverter.class)
     private Role role;
 
     /** 消息内容 */

@@ -12,7 +12,7 @@ import org.zhj.agentz.infrastructure.llm.protocol.enums.ProviderProtocol;
  */
 public class LLMProviderService {
 
-    public static ChatLanguageModel getNormal(ProviderProtocol protocol, ProviderConfig providerConfig){
+    public static ChatLanguageModel getStrand(ProviderProtocol protocol, ProviderConfig providerConfig){
         return LLMProviderFactory.getLLMProvider(protocol, providerConfig);
     }
 

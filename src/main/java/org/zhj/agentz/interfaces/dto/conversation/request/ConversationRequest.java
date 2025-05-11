@@ -1,4 +1,4 @@
-package org.zhj.agentz.interfaces.dto.conversation;
+package org.zhj.agentz.interfaces.dto.conversation.request;
 
 public class ConversationRequest {
 

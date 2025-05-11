@@ -13,10 +13,10 @@ import org.zhj.agentz.domain.llm.model.enums.ProviderType;
 import org.zhj.agentz.domain.llm.service.LLMDomainService;
 import org.zhj.agentz.infrastructure.entity.Operator;
 import org.zhj.agentz.infrastructure.llm.protocol.enums.ProviderProtocol;
-import org.zhj.agentz.interfaces.dto.llm.ModelCreateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ModelUpdateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ProviderCreateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ProviderUpdateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ModelCreateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ModelUpdateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ProviderCreateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ProviderUpdateRequest;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -73,7 +73,7 @@ public class LLMAppService {
      * @return ProviderDTO
      */
     public ProviderDTO getProvider(String providerId, String userId) {
-        ProviderEntity provider = llmDomainService.getProvider(providerId);
+        ProviderEntity provider = llmDomainService.getProvider(providerId,userId);
         return ProviderAssembler.toDTO(provider);
     }
 

@@ -13,7 +13,7 @@ import org.zhj.agentz.domain.agent.model.AgentWorkspaceEntity;
 import org.zhj.agentz.domain.service.AgentDomainService;
 import org.zhj.agentz.domain.service.AgentWorkspaceDomainService;
 import org.zhj.agentz.infrastructure.exception.ParamValidationException;
-import org.zhj.agentz.interfaces.dto.agent.*;
+import org.zhj.agentz.interfaces.dto.agent.request.*;
 
 import java.util.List;
 

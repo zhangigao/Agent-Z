@@ -13,7 +13,7 @@ import org.zhj.agentz.domain.conversation.service.SessionDomainService;
 import org.zhj.agentz.domain.service.AgentDomainService;
 import org.zhj.agentz.domain.service.AgentWorkspaceDomainService;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
-import org.zhj.agentz.interfaces.dto.conversation.ConversationRequest;
+import org.zhj.agentz.interfaces.dto.conversation.request.ConversationRequest;
 
 import java.util.List;
 

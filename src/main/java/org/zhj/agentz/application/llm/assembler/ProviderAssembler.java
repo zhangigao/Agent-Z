@@ -6,8 +6,8 @@ import org.zhj.agentz.application.llm.dto.ProviderDTO;
 import org.zhj.agentz.domain.llm.model.ModelEntity;
 import org.zhj.agentz.domain.llm.model.ProviderAggregate;
 import org.zhj.agentz.domain.llm.model.ProviderEntity;
-import org.zhj.agentz.interfaces.dto.llm.ProviderCreateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ProviderUpdateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ProviderCreateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ProviderUpdateRequest;
 
 import java.time.LocalDateTime;
 import java.util.List;

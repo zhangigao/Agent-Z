@@ -3,8 +3,8 @@ package org.zhj.agentz.application.llm.assembler;
 
 import org.zhj.agentz.application.llm.dto.ModelDTO;
 import org.zhj.agentz.domain.llm.model.ModelEntity;
-import org.zhj.agentz.interfaces.dto.llm.ModelCreateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ModelUpdateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ModelCreateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ModelUpdateRequest;
 
 import java.time.LocalDateTime;
 import java.util.Collections;

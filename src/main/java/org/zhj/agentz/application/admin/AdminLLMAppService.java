@@ -9,10 +9,10 @@ import org.zhj.agentz.domain.llm.model.ModelEntity;
 import org.zhj.agentz.domain.llm.model.ProviderEntity;
 import org.zhj.agentz.domain.llm.service.LLMDomainService;
 import org.zhj.agentz.infrastructure.entity.Operator;
-import org.zhj.agentz.interfaces.dto.llm.ModelCreateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ModelUpdateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ProviderCreateRequest;
-import org.zhj.agentz.interfaces.dto.llm.ProviderUpdateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ModelCreateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ModelUpdateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ProviderCreateRequest;
+import org.zhj.agentz.interfaces.dto.llm.request.ProviderUpdateRequest;
 
 
 @Service

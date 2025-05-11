@@ -151,9 +151,14 @@ public class LLMDomainService {
         return providerAggregates;
     }
 
-    public ProviderEntity getProvider(String providerId) {
+    /**
+     * 获取服务商
+     * @param providerId 服务商id
+     * @param userId 用户id
+     */
+    public ProviderEntity getProvider(String providerId, String userId) {
 
-        Wrapper<ProviderEntity> wrapper = Wrappers.<ProviderEntity>lambdaQuery().eq(ProviderEntity::getId, providerId);
+        Wrapper<ProviderEntity> wrapper = Wrappers.<ProviderEntity>lambdaQuery().eq(ProviderEntity::getId, providerId).eq(ProviderEntity::getUserId, userId);
         ProviderEntity provider = providerRepository.selectOne(wrapper);
         if (provider == null) {
             throw new BusinessException("服务商不存在");
@@ -186,7 +191,7 @@ public class LLMDomainService {
     // 获取服务商聚合根
     public ProviderAggregate getProviderAggregate(String providerId, String userId) {
         // 获取服务商
-        ProviderEntity provider = getProvider(providerId);
+        ProviderEntity provider = getProvider(providerId,userId);
         // 获取服务商下的激活模型列表
         List<ModelEntity> modelList = getActiveModelList(providerId, userId);
 

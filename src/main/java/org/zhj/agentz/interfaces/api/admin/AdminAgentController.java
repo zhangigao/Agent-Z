@@ -5,7 +5,7 @@ import org.zhj.agentz.application.agent.service.AgentAppService;
 import org.zhj.agentz.domain.agent.constant.PublishStatus;
 import org.zhj.agentz.application.agent.dto.AgentVersionDTO;
 import org.zhj.agentz.interfaces.api.common.Result;
-import org.zhj.agentz.interfaces.dto.agent.ReviewAgentVersionRequest;
+import org.zhj.agentz.interfaces.dto.agent.request.ReviewAgentVersionRequest;
 
 import java.util.List;
 

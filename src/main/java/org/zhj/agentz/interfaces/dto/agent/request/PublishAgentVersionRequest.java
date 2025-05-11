@@ -1,4 +1,4 @@
-package org.zhj.agentz.interfaces.dto.agent;
+package org.zhj.agentz.interfaces.dto.agent.request;
 
 import jakarta.validation.constraints.NotBlank;
 import org.zhj.agentz.infrastructure.exception.ParamValidationException;

@@ -110,7 +110,7 @@ public class AgentWorkspaceAppService {
         // 激活校验
         ModelEntity model = llmDomainService.getModelById(modelId);
         model.isActive();
-        ProviderEntity provider = llmDomainService.getProvider(model.getProviderId());
+        ProviderEntity provider = llmDomainService.getProvider(model.getProviderId(),userId);
         provider.isActive();
         agentWorkspaceDomainService.update(new AgentWorkspaceEntity(agentId,userId,llmModelConfig));
     }

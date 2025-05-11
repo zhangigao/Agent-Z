@@ -1,18 +1,18 @@
-package org.zhj.agentz.interfaces.dto.llm;
-
+package org.zhj.agentz.interfaces.dto.llm.request;
 
 import jakarta.validation.constraints.NotBlank;
 import org.zhj.agentz.domain.agent.model.LLMModelConfig;
+import org.zhj.agentz.domain.llm.model.enums.ModelType;
 
 /**
- * 模型更新请求
+ * 模型创建请求
  */
-public class ModelUpdateRequest {
+public class ModelCreateRequest {
     
     /**
-     * 模型ID
+     * 服务商ID
      */
-    private String id;
+    private String providerId;
 
     /**
      * 模型id
@@ -32,19 +32,29 @@ public class ModelUpdateRequest {
     private String description;
 
     /**
+     * 模型类型
+     */
+    private ModelType type;
+
+    /**
      * 模型配置
      */
     private LLMModelConfig config;
-
-    /**
-     * 模型状态
-     */
-    public String getId() {
-        return id;
+    
+    public String getProviderId() {
+        return providerId;
     }
     
-    public void setId(String id) {
-        this.id = id;
+    public void setProviderId(String providerId) {
+        this.providerId = providerId;
+    }
+    
+    public String getModelId() {
+        return modelId;
+    }
+    
+    public void setModelId(String modelId) {
+        this.modelId = modelId;
     }
     
     public String getName() {
@@ -63,6 +73,14 @@ public class ModelUpdateRequest {
         this.description = description;
     }
     
+    public ModelType getType() {
+        return type;
+    }
+    
+    public void setType(ModelType type) {
+        this.type = type;
+    }
+    
     public LLMModelConfig getConfig() {
         return config;
     }
@@ -71,11 +89,4 @@ public class ModelUpdateRequest {
         this.config = config;
     }
 
-    public String getModelId() {
-        return modelId;
-    }
-
-    public void setModelId(String modelId) {
-        this.modelId = modelId;
-    }
 }
