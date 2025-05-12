@@ -12,20 +12,28 @@ public interface MessageTransport<T> {
      * @return 连接对象
      */
     T createConnection(long timeout);
-    
+
     /**
      * 发送消息
      * @param connection 连接对象
-     * @param response 消息内容
+     * @param streamChatResponse 消息内容
      */
-    void sendMessage(T connection, AgentChatResponse response);
-    
+    void sendMessage(T connection, AgentChatResponse streamChatResponse);
+
+    /**
+     * 发送消息
+     * @param connection 连接对象
+     * @param streamChatResponse 消息内容
+     */
+    void sendEndMessage(T connection, AgentChatResponse streamChatResponse);
+
+
     /**
      * 完成连接
      * @param connection 连接对象
      */
     void completeConnection(T connection);
-    
+
     /**
      * 处理错误
      * @param connection 连接对象

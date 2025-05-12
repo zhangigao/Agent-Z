@@ -1,5 +1,6 @@
 package org.zhj.agentz.domain.conversation.handler;
 
+import org.zhj.agentz.application.conversation.service.service.handler.context.ChatContext;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
 import org.zhj.agentz.domain.agent.model.LLMModelConfig;
 import org.zhj.agentz.domain.conversation.model.ContextEntity;
@@ -15,7 +16,7 @@ import java.util.List;
  * @Author 86155
  * @Date 2025/5/11
  */
-public class ChatEnvironment {
+public class ChatEnvironment extends ChatContext {
     /**
      * 会话ID
      */

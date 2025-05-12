@@ -42,7 +42,7 @@ public class AgentAppService {
     @Transactional
     public AgentDTO createAgent(CreateAgentRequest request, String userId) {
 
-        // todo xhy 判断用户是否存在
+        // todo 判断用户是否存在
 
         // 使用组装器创建领域实体
         AgentEntity entity = AgentAssembler.toEntity(request,userId);
@@ -59,7 +59,7 @@ public class AgentAppService {
      * 获取Agent信息
      */
     public AgentDTO getAgent(String agentId, String userId) {
-        // todo xhy 判断用户是否存在
+        // todo 判断用户是否存在
         AgentEntity agent = agentServiceDomainService.getAgent(agentId, userId);
         return AgentAssembler.toDTO(agent);
     }

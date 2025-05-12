@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.zhj.agentz.application.agent.service.AgentSessionAppService;
 import org.zhj.agentz.application.conversation.dto.ChatRequest;
-import org.zhj.agentz.application.conversation.service.ConversationAppService;
+import org.zhj.agentz.application.conversation.service.service.ConversationAppService;
 import org.zhj.agentz.domain.conversation.dto.MessageDTO;
 import org.zhj.agentz.domain.conversation.dto.SessionDTO;
 import org.zhj.agentz.infrastructure.auth.UserContext;
@@ -62,7 +62,7 @@ public class PortalAgentSessionController {
 
     /**
      * 创建会话
-     * 
+     *
      * @param agentId 助理id
      * @return 会话
      */
@@ -74,7 +74,7 @@ public class PortalAgentSessionController {
 
     /**
      * 更新会话
-     * 
+     *
      * @param id    会话id
      * @param title 标题
      */
@@ -87,7 +87,7 @@ public class PortalAgentSessionController {
 
     /**
      * 删除会话
-     * 
+     *
      * @param id 会话id
      */
     @DeleteMapping("/{id}")

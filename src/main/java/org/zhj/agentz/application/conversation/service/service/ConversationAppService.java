@@ -1,24 +1,16 @@
-package org.zhj.agentz.application.conversation.service;
+package org.zhj.agentz.application.conversation.service.service;
 
-import com.baomidou.mybatisplus.core.toolkit.StringUtils;
-import dev.langchain4j.data.message.*;
-import dev.langchain4j.model.chat.StreamingChatLanguageModel;
-import dev.langchain4j.model.chat.response.ChatResponse;
-import dev.langchain4j.model.chat.response.StreamingChatResponseHandler;
-import dev.langchain4j.model.openai.OpenAiChatRequestParameters;
-import dev.langchain4j.model.output.TokenUsage;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import org.zhj.agentz.application.conversation.assembler.MessageAssembler;
 import org.zhj.agentz.application.conversation.dto.ChatRequest;
+import org.zhj.agentz.application.conversation.service.service.handler.MessageHandlerFactory;
+import org.zhj.agentz.application.conversation.service.service.handler.context.ChatContext;
+import org.zhj.agentz.application.conversation.service.service.message.AbstractMessageHandler;
 import org.zhj.agentz.domain.agent.model.AgentEntity;
 import org.zhj.agentz.domain.agent.model.AgentWorkspaceEntity;
 import org.zhj.agentz.domain.agent.model.LLMModelConfig;
-import org.zhj.agentz.domain.conversation.constant.Role;
 import org.zhj.agentz.domain.conversation.dto.MessageDTO;
-import org.zhj.agentz.domain.conversation.handler.ChatEnvironment;
-import org.zhj.agentz.domain.conversation.handler.MessageHandler;
-import org.zhj.agentz.domain.conversation.handler.MessageHandlerFactory;
 import org.zhj.agentz.domain.conversation.model.ContextEntity;
 import org.zhj.agentz.domain.conversation.model.MessageEntity;
 import org.zhj.agentz.domain.conversation.model.SessionEntity;
@@ -28,7 +20,6 @@ import org.zhj.agentz.domain.conversation.service.MessageDomainService;
 import org.zhj.agentz.domain.conversation.service.SessionDomainService;
 import org.zhj.agentz.domain.llm.model.ModelEntity;
 import org.zhj.agentz.domain.llm.model.ProviderEntity;
-import org.zhj.agentz.domain.llm.model.config.ProviderConfig;
 import org.zhj.agentz.domain.llm.service.LLMDomainService;
 import org.zhj.agentz.domain.service.AgentDomainService;
 import org.zhj.agentz.domain.service.AgentWorkspaceDomainService;
@@ -38,17 +29,13 @@ import org.zhj.agentz.domain.token.model.TokenProcessResult;
 import org.zhj.agentz.domain.token.model.config.TokenOverflowConfig;
 import org.zhj.agentz.domain.token.service.TokenDomainService;
 import org.zhj.agentz.infrastructure.exception.BusinessException;
-import org.zhj.agentz.infrastructure.llm.LLMServiceFactory;
-import org.zhj.agentz.infrastructure.llm.protocol.LLMProviderService;
+import org.zhj.agentz.infrastructure.llm.config.ProviderConfig;
 import org.zhj.agentz.infrastructure.transport.MessageTransport;
 import org.zhj.agentz.infrastructure.transport.MessageTransportFactory;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 /**
  * 对话应用服务，用于适配域层的对话服务
@@ -65,7 +52,6 @@ public class ConversationAppService {
     private final TokenDomainService tokenDomainService;
     private final MessageDomainService messageDomainService;
 
-    // 新增依赖
     private final MessageHandlerFactory messageHandlerFactory;
     private final MessageTransportFactory transportFactory;
 
@@ -80,8 +66,7 @@ public class ConversationAppService {
             TokenDomainService tokenDomainService,
             MessageDomainService messageDomainService,
             MessageHandlerFactory messageHandlerFactory,
-            MessageTransportFactory transportFactory,
-            LLMServiceFactory llmServiceFactory) {
+            MessageTransportFactory transportFactory) {
         this.conversationDomainService = conversationDomainService;
         this.sessionDomainService = sessionDomainService;
         this.agentDomainService = agentDomainService;
@@ -122,16 +107,16 @@ public class ConversationAppService {
      */
     public SseEmitter chat(ChatRequest chatRequest, String userId) {
         // 1. 准备对话环境
-        ChatEnvironment environment = prepareEnvironment(chatRequest, userId);
+        ChatContext environment = prepareEnvironment(chatRequest, userId);
 
         // 2. 获取传输方式 (当前仅支持SSE，将来支持WebSocket)
         MessageTransport<SseEmitter> transport = transportFactory.getTransport(MessageTransportFactory.TRANSPORT_TYPE_SSE);
 
         // 3. 获取适合的消息处理器 (根据agent类型)
-        MessageHandler handler = messageHandlerFactory.getHandler(environment.getAgent());
+        AbstractMessageHandler handler = messageHandlerFactory.getHandler(environment.getAgent());
 
         // 4. 处理对话
-        return handler.handleChat(environment, transport);
+        return handler.chat(environment, transport);
     }
 
     /**
@@ -141,7 +126,7 @@ public class ConversationAppService {
      * @param userId 用户ID
      * @return 对话环境
      */
-    private ChatEnvironment prepareEnvironment(ChatRequest chatRequest, String userId) {
+    private ChatContext prepareEnvironment(ChatRequest chatRequest, String userId) {
         // 1. 获取会话
         String sessionId = chatRequest.getSessionId();
         SessionEntity session = sessionDomainService.getSession(sessionId, userId);
@@ -165,7 +150,7 @@ public class ConversationAppService {
         provider.isActive();
 
         // 5. 创建环境对象
-        ChatEnvironment environment = new ChatEnvironment();
+        ChatContext environment = new ChatContext();
         environment.setSessionId(sessionId);
         environment.setUserId(userId);
         environment.setUserMessage(chatRequest.getMessage());
@@ -185,7 +170,7 @@ public class ConversationAppService {
      *
      * @param environment 对话环境
      */
-    private void setupContextAndHistory(ChatEnvironment environment) {
+    private void setupContextAndHistory(ChatContext environment) {
         String sessionId = environment.getSessionId();
 
         // 获取上下文
@@ -216,7 +201,7 @@ public class ConversationAppService {
      * @param messageEntities 消息实体列表
      */
     private void applyTokenOverflowStrategy(
-            ChatEnvironment environment,
+            ChatContext environment,
             ContextEntity contextEntity,
             List<MessageEntity> messageEntities) {
 
@@ -236,8 +221,8 @@ public class ConversationAppService {
         tokenOverflowConfig.setSummaryThreshold(llmModelConfig.getSummaryThreshold());
 
         // 设置提供商配置
-        ProviderConfig providerConfig = provider.getConfig();
-        tokenOverflowConfig.setProviderConfig(new org.zhj.agentz.infrastructure.llm.config.ProviderConfig(
+        org.zhj.agentz.domain.llm.model.config.ProviderConfig providerConfig = provider.getConfig();
+        tokenOverflowConfig.setProviderConfig(new ProviderConfig(
                 providerConfig.getApiKey(),
                 providerConfig.getBaseUrl(),
                 environment.getModel().getModelId(),
@@ -278,4 +263,3 @@ public class ConversationAppService {
         }).collect(Collectors.toList());
     }
 }
-

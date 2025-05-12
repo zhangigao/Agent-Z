@@ -10,13 +10,8 @@ import org.springframework.context.ConfigurableApplicationContext;
 @SpringBootApplication
 public class AgentZApplication {
 
-    public static ConfigurableApplicationContext context;
-
     public static void main(String[] args) {
-        ConfigurableApplicationContext context = SpringApplication.run(AgentZApplication.class, args);
+        SpringApplication.run(AgentZApplication.class, args);
     }
 
-    public static ConfigurableApplicationContext getContext() {
-        return context;
-    }
 }
