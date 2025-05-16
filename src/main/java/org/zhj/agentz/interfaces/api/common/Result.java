@@ -165,4 +165,8 @@ public class Result<T> {
     public void setTimestamp(Long timestamp) {
         this.timestamp = timestamp;
     }
+
+    public Result<T> message(String message) {
+        return this;
+    }
 } 

@@ -40,3 +40,8 @@ logging:
     org.zhj: debug
   file:
     name: logs/agent-z.log
+mail:
+  smtp:
+    host: smtp.163.com
+    username: ${MAIL_SMTP_USERNAME}
+    password: ${MAIL_SMTP_PASSWORD}
