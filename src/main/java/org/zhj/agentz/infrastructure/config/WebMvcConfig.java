@@ -6,12 +6,7 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.zhj.agentz.infrastructure.auth.UserAuthInterceptor;
 
-/**
- * Web MVC 配置类
- *
- * @Author 86155
- * @Date 2025/5/7
- */
+/** Web MVC 配置类 用于配置拦截器、跨域等 */
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
@@ -23,24 +18,11 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        // 注册用户鉴权拦截器，并指定拦截路径
-        registry.addInterceptor(userAuthInterceptor)
-                // 添加拦截路径 - 拦截所有API请求
-                .addPathPatterns("/**")
-                // 排除不需要鉴权的路径，例如登录、注册等
-                .excludePathPatterns("/api/auth/login", "/api/auth/register");
+        registry.addInterceptor(userAuthInterceptor).addPathPatterns("/**") // 拦截所有请求
+                .excludePathPatterns( // 不拦截以下路径
+                        "/login", // 登录接口
+                        "/register", // 注册接口
+                        "/send-email-code", "/verify-email-code", "/get-captcha", "/reset-password",
+                        "/send-reset-password-code");
     }
-
-    /**
-     * 配置异步请求处理
-     * 设置默认的异步请求超时时间
-     */
-    @Override
-    public void configureAsyncSupport(AsyncSupportConfigurer configurer) {
-        // 设置异步请求超时时间为5分钟
-        configurer.setDefaultTimeout(300000);
-        // 设置任务执行器
-        // configurer.setTaskExecutor(...); // 如果需要自定义线程池可以在这里设置
-    }
-
 }

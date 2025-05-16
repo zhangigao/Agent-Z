@@ -8,6 +8,7 @@ import org.springframework.core.Ordered;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 /**
  * 跨域配置
@@ -15,7 +16,7 @@ import org.springframework.web.filter.CorsFilter;
  * @Date 2025/5/7
  */
 @Configuration
-public class CorsConfig {
+public class CorsConfig implements WebMvcConfigurer {
 
     @Bean
     public FilterRegistrationBean<CorsFilter>corsFilter() {
